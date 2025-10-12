@@ -8,7 +8,7 @@
 import Foundation
 
 /// Base protocol for all network requests
-public protocol Request {
+public protocol Request: Identifiable {
     /// The response type this request expects
     associatedtype Response
 
