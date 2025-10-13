@@ -8,4 +8,5 @@
 public enum RequestError: Error {
     case invalidBaseURL
     case invalidURL
+    case invalidURLRequest
 }

@@ -79,3 +79,36 @@ extension Request {
         return urlRequest
     }
 }
+
+extension Request {
+    public func cURLDescription(baseURL: URL) throws -> String {
+        guard
+            let request = try? urlRequest(baseURL: baseURL),
+            let url = request.url,
+            let method = request.httpMethod
+        else { throw RequestError.invalidURLRequest }
+
+        var components = ["$ curl -v"]
+
+        components.append("-X \(method)")
+
+        let headers = request.allHTTPHeaderFields ?? [:]
+
+        for header in headers.sorted(by: { $0.key < $1.key }) {
+            let escapedValue = header.value.replacingOccurrences(of: "\"", with: "\\\"")
+            components.append("-H \"\(header.key): \(escapedValue)\"")
+        }
+
+        if let httpBodyData = request.httpBody {
+            let httpBody = String(decoding: httpBodyData, as: UTF8.self)
+            var escapedBody = httpBody.replacingOccurrences(of: "\\\"", with: "\\\\\"")
+            escapedBody = escapedBody.replacingOccurrences(of: "\"", with: "\\\"")
+
+            components.append("-d \"\(escapedBody)\"")
+        }
+
+        components.append("\"\(url.absoluteString)\"")
+
+        return components.joined(separator: " \\\n")
+    }
+}
