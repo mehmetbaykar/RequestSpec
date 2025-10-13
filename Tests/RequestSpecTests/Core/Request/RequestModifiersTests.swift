@@ -52,8 +52,8 @@ struct HeadersModifierTests {
         #expect(request.components.headers["Accept"] == "application/json")
     }
 
-    @Test("headers() modifier supports conditional headers")
-    func testHeadersModifierConditionalHeaders() {
+    @Test("headers() modifier supports conditional headers (only if statement)")
+    func testHeadersModifierIfCondition() {
         let includeAuth = true
 
         let request = Get<String>("users")
@@ -65,6 +65,32 @@ struct HeadersModifierTests {
 
         #expect(request.components.headers.count == 1)
         #expect(request.components.headers["Authorization"] == "Bearer token")
+    }
+
+    @Test("headers() modifier supports conditional headers (if-else statement)")
+    func testHeadersModifierIfElseCondition() {
+        struct User: RequestSpec {
+            let useAuthToken: Bool
+
+            var body: Get<String> {
+                Get("users")
+                    .headers {
+                        if useAuthToken {
+                            Authorization("Bearer token")
+                        } else {
+                            Header("X-Anonymous", value: "true")
+                        }
+                    }
+            }
+        }
+
+        let requestWithToken = User(useAuthToken: true)
+        #expect(requestWithToken.body.components.headers.count == 1)
+        #expect(requestWithToken.body.components.headers["Authorization"] == "Bearer token")
+
+        let requestWithAnonymous = User(useAuthToken: false)
+        #expect(requestWithAnonymous.body.components.headers.count == 1)
+        #expect(requestWithAnonymous.body.components.headers["X-Anonymous"] == "true")
     }
 
     @Test("headers() modifier supports loops")
@@ -96,6 +122,49 @@ struct HeadersModifierTests {
         // Both headers should be present
         #expect(request.components.headers["Authorization"] == "Bearer token")
         #expect(request.components.headers["Accept"] == "application/json")
+    }
+
+    @Test("headers() modifier supports common header types")
+    func testHeadersModifierCommonHeaderTypes() {
+        let request = Get<String>("users")
+            .headers {
+                Authorization("Bearer token123")
+                ContentType("application/json")
+                Accept("application/json")
+                XApiKey("api-key-123")
+                UserAgent("RequestSpec/1.0")
+                Header("Custom-Header", value: "custom-value")
+            }
+
+        #expect(request.components.headers.count == 6)
+        #expect(request.components.headers["Authorization"] == "Bearer token123")
+        #expect(request.components.headers["Content-Type"] == "application/json")
+        #expect(request.components.headers["Accept"] == "application/json")
+        #expect(request.components.headers["X-Api-Key"] == "api-key-123")
+        #expect(request.components.headers["User-Agent"] == "RequestSpec/1.0")
+        #expect(request.components.headers["Custom-Header"] == "custom-value")
+    }
+
+    @Test("headers() modifier supports void-returning functions like logging")
+    func testHeadersModifierWithVoidReturningFunctions() {
+        var loggedMessage = ""
+
+        func logMessage(_ message: String) {
+            loggedMessage = message
+        }
+
+        let request = Get<String>("users")
+            .headers {
+                Authorization("Bearer token")
+                Accept("application/json")
+                // Void-returning function
+                logMessage("Headers added")
+            }
+
+        #expect(request.components.headers.count == 2)
+        #expect(request.components.headers["Authorization"] == "Bearer token")
+        #expect(request.components.headers["Accept"] == "application/json")
+        #expect(loggedMessage == "Headers added")
     }
 }
 
@@ -130,8 +199,8 @@ struct QueryItemsModifierTests {
         #expect(request.components.queryItems[1].value == "10")
     }
 
-    @Test("queryItems() modifier supports conditional items")
-    func testQueryItemsModifierConditionalItems() {
+    @Test("queryItems() modifier supports conditional items (only if statement)")
+    func testQueryItemsModifierIfCondition() {
         let includeFilter = true
 
         let request = Get<String>("users")
@@ -144,6 +213,35 @@ struct QueryItemsModifierTests {
 
         #expect(request.components.queryItems.count == 2)
         #expect(request.components.queryItems[1].name == "filter")
+    }
+
+    @Test("queryItems() modifier supports conditional items (if-else statement)")
+    func testQueryItemsModifierIfElseCondition() {
+        struct User: RequestSpec {
+            let includeFilter: Bool
+
+            var body: Get<String> {
+                Get("users")
+                    .queryItems {
+                        Item("page", value: "1")
+                        if includeFilter {
+                            Item("filter", value: "active")
+                        } else {
+                            Item("filter", value: "inactive")
+                        }
+                    }
+            }
+        }
+
+        let requestWithFilter = User(includeFilter: true)
+        #expect(requestWithFilter.body.components.queryItems.count == 2)
+        #expect(requestWithFilter.body.components.queryItems[1].name == "filter")
+        #expect(requestWithFilter.body.components.queryItems[1].value == "active")
+
+        let requestWithoutFilter = User(includeFilter: false)
+        #expect(requestWithoutFilter.body.components.queryItems.count == 2)
+        #expect(requestWithoutFilter.body.components.queryItems[1].name == "filter")
+        #expect(requestWithoutFilter.body.components.queryItems[1].value == "inactive")
     }
 
     @Test("queryItems() modifier supports loops")
@@ -160,6 +258,26 @@ struct QueryItemsModifierTests {
         #expect(request.components.queryItems.count == 2)
         #expect(request.components.queryItems[0].value == "swift")
         #expect(request.components.queryItems[1].value == "testing")
+    }
+
+    @Test("queryItems() modifier supports void-returning functions like logging")
+    func testQueryItemsModifierWithVoidReturningFunctions() {
+        var loggedMessage = ""
+
+        func logMessage(_ message: String) {
+            loggedMessage = message
+        }
+
+        let request = Get<String>("users")
+            .queryItems {
+                Item("page", value: "1")
+                logMessage("Query items added")
+            }
+
+        #expect(request.components.queryItems.count == 1)
+        #expect(request.components.queryItems[0].name == "page")
+        #expect(request.components.queryItems[0].value == "1")
+        #expect(loggedMessage == "Query items added")
     }
 }
 
@@ -190,7 +308,7 @@ struct BodyModifierTests {
         #expect(request.components.body == nil)
     }
 
-    @Test("body() modifier supports conditional body")
+    @Test("body() modifier supports conditional body (only if statement)")
     func testBodyModifierConditionalBody() {
         let includeBody = true
         let user = TestUser(name: "John", email: "john@example.com")
@@ -205,6 +323,23 @@ struct BodyModifierTests {
             }
 
         #expect(request.components.body != nil)
+    }
+
+    @Test("body() modifier supports conditional body (if-else statement)")
+    func testBodyModifierConditionalBodyIfElse() throws {
+        let greeting = "Hello, RequestSpec!"
+
+        let request = Post<TestResponse>("users")
+            .body {
+                if false {
+                    TestUser(name: "John", email: "john@example.com")
+                } else {
+                    greeting
+                }
+            }
+
+        let data = try #require(request.components.body)
+        #expect(try JSONDecoder().decode(String.self, from: data) == greeting)
     }
 
     @Test("body() modifier uses custom encoder")
