@@ -36,8 +36,9 @@ extension Request {
 
 extension Request {
     /// Build a URLRequest from this request and a base URL
-    /// - Parameter baseURL: The base URL string
+    /// - Parameter baseURL: The base URL
     /// - Returns: A configured URLRequest
+    /// - Throws:  Any error thrown while constructing the `URLRequest`.
     public func urlRequest(baseURL: URL) throws -> URLRequest {
         // Build URL
         guard var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {

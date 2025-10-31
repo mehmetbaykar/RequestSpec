@@ -17,6 +17,11 @@ public protocol RequestSpec: Sendable {
 }
 
 extension RequestSpec {
+    /// Build a URLRequest from this request and a base URL
+    /// - Parameter baseURL: The base URL
+    /// - Returns: A configured URLRequest
+    /// - Throws:  Any error thrown while constructing the `URLRequest`.
+    ///
     /// This is a shortcut for ``Request/urlRequest(baseURL:)`` method.
     public func urlRequest(baseURL: URL) throws -> URLRequest {
         try self.body.urlRequest(baseURL: baseURL)
