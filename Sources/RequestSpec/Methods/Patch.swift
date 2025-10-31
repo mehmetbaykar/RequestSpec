@@ -9,7 +9,7 @@
 public protocol PatchRequest: Request {}
 
 /// A PATCH request for updating resources
-public struct Patch<Response: Decodable>: PatchRequest {
+public struct Patch<ResponseBody: Decodable>: PatchRequest {
     /// HTTP method (always PATCH)
     public let method: HTTPMethod = .patch
 

@@ -9,7 +9,7 @@
 public protocol HeadRequest: Request {}
 
 /// A HEAD request for checking resources
-public struct Head<Response: Decodable>: HeadRequest {
+public struct Head<ResponseBody: Decodable>: HeadRequest {
     /// HTTP method (always HEAD)
     public let method: HTTPMethod = .head
 

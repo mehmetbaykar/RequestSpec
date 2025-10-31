@@ -9,7 +9,7 @@
 public protocol OptionsRequest: Request {}
 
 /// A OPTIONS request for checking resources
-public struct Options<Response: Decodable>: OptionsRequest {
+public struct Options<ResponseBody: Decodable>: OptionsRequest {
     /// HTTP method (always OPTIONS)
     public let method: HTTPMethod = .options
 

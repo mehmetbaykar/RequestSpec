@@ -9,7 +9,7 @@
 public protocol DeleteRequest: Request {}
 
 /// A DELETE request for deleting resources
-public struct Delete<Response: Decodable>: DeleteRequest {
+public struct Delete<ResponseBody: Decodable>: DeleteRequest {
     /// HTTP method (always DELETE)
     public let method: HTTPMethod = .delete
 

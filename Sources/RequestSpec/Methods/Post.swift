@@ -9,7 +9,7 @@
 public protocol PostRequest: Request {}
 
 /// A POST request for creating resources
-public struct Post<Response: Decodable>: PostRequest {
+public struct Post<ResponseBody: Decodable>: PostRequest {
     /// HTTP method (always POST)
     public let method: HTTPMethod = .post
 

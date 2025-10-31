@@ -9,7 +9,7 @@
 public protocol PutRequest: Request {}
 
 /// A PUT request for updating resources
-public struct Put<Response: Decodable>: PutRequest {
+public struct Put<ResponseBody: Decodable>: PutRequest {
     /// HTTP method (always PUT)
     public let method: HTTPMethod = .put
 

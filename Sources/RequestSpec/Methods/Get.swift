@@ -9,7 +9,7 @@
 public protocol GetRequest: Request {}
 
 /// A GET request for retrieving resources
-public struct Get<Response: Decodable>: GetRequest {
+public struct Get<ResponseBody: Decodable>: GetRequest {
     /// HTTP method (always GET)
     public let method: HTTPMethod = .get
 
