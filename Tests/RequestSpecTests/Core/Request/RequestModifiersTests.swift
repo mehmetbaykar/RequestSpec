@@ -302,7 +302,7 @@ struct BodyModifierTests {
     func testBodyModifierHandlesNil() {
         let request = Post<TestResponse>("users")
             .body {
-                nil as TestUser?
+                nil
             }
 
         #expect(request.components.body == nil)
