@@ -35,16 +35,19 @@ public struct HTTPResponse<Body> {
     }
 }
 
-extension HTTPResponse {
-    public enum Status {
-        case information
-        case success
-        case redirection
-        case clientError
-        case serverError
-        case unknown
-    }
+// MARK: - HTTP Response Status
 
+/// HTTP response status categories
+public enum HTTPResponseStatus: Sendable {
+    case information
+    case success
+    case redirection
+    case clientError
+    case serverError
+    case unknown
+}
+
+extension HTTPResponse {
     /// The status of the response
     ///
     /// - information: 100-199
@@ -53,7 +56,7 @@ extension HTTPResponse {
     /// - clientError: 400-499
     /// - serverError: 500-599
     /// - unknown: other
-    public var status: Status {
+    public var status: HTTPResponseStatus {
         switch statusCode {
         case 100...199:
             return .information
