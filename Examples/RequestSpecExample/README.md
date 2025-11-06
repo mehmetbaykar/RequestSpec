@@ -1,6 +1,6 @@
 # RequestSpec Example
 
-A practical, real-world example showing how to build a type-safe REST API client using RequestSpec.
+A practical, real-world example showing how to build a complete networking layer using RequestSpec.
 
 ## What This Does
 
@@ -8,10 +8,10 @@ This example connects to [JSONPlaceholder](https://jsonplaceholder.typicode.com)
 
 ## What's Inside
 
-✨ **Complete API coverage** for 6 resources (Posts, Comments, Albums, Photos, Todos, Users)
-📝 **24+ working examples** covering all HTTP methods
-🏗️ **Clean architecture** with protocols, services, and models
-📚 **Detailed documentation** with inline comments and explanations
+- **Complete API coverage** for 6 resources (Posts, Comments, Albums, Photos, Todos, Users)
+- **24+ working examples** covering all HTTP methods
+- **Clean architecture** with protocols, services, and models
+- **Detailed documentation** with inline comments and explanations
 
 ## How to Run
 
