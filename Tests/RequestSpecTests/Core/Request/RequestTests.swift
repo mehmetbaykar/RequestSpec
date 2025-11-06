@@ -48,6 +48,24 @@ struct URLConstructionTests {
         let url = try #require(urlRequest.url)
         #expect(url.absoluteString == "https://api.example.com/")
     }
+
+    @Test(
+        "Request has same id after creation",
+        arguments: [
+            Get<TestResponse>("users"),
+            Post<TestResponse>("users"),
+            Put<TestResponse>("users"),
+            Patch<TestResponse>("users"),
+            Delete<TestResponse>("users"),
+            Head<TestResponse>("users"),
+            Options<TestResponse>("users"),
+        ] as [any Request],
+    )
+    func testRequestId(request: any Request) throws {
+        let id1 = request.id
+        let id2 = request.id
+        #expect(id1 == id2)
+    }
 }
 
 // MARK: - Query Items Tests
