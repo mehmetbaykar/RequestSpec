@@ -66,6 +66,7 @@ struct RequestSpecExample {
 
 /// The main app that demonstrates all JSONPlaceholder API operations
 /// This is where we call all our example functions in a nice organized way
+@MainActor
 struct JSONPlaceholderApp {
     let service: JSONPlaceholderServiceProtocol
 
@@ -370,7 +371,7 @@ struct JSONPlaceholderApp {
 ///
 /// By conforming to NetworkService, we get the send() method that handles
 /// all the networking heavy lifting for us.
-protocol JSONPlaceholderServiceProtocol: NetworkService {
+protocol JSONPlaceholderServiceProtocol: NetworkService, Sendable {
     // MARK: Posts
     func getPosts() async throws -> [BlogPost]
     func getPost(id: Int) async throws -> BlogPost
@@ -418,12 +419,12 @@ protocol JSONPlaceholderServiceProtocol: NetworkService {
 /// The baseURL and decoder are required by NetworkService protocol.
 final class JSONPlaceholderService: JSONPlaceholderServiceProtocol {
     /// Base URL for all API requests
-    var baseURL: URL = URL(string: "https://jsonplaceholder.typicode.com")!
+    let baseURL: URL = URL(string: "https://jsonplaceholder.typicode.com")!
 
     /// JSON decoder configuration
     /// We're using default keys here, but you could customize this
     /// (e.g., convert snake_case to camelCase if your API uses that)
-    var decoder: Decoder = {
+    let decoder: Decoder & Sendable = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .useDefaultKeys
         return decoder
