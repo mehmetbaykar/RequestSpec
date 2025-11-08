@@ -47,12 +47,7 @@
 
  */
 
-import Playgrounds
 import RequestSpec
-
-#Playground("RequestSpec Example") {
-
-}
 
 // MARK: - Main Entry Point
 
