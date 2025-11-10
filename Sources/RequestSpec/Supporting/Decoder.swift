@@ -10,7 +10,7 @@ import Foundation
 /// A protocol for decoding data into Swift types.
 ///
 /// `Decoder` provides a unified interface for decoding response data in ``NetworkService``.
-/// 
+///
 /// The library provides a default conformance for `JSONDecoder`, allowing you to use
 /// standard JSON decoding out of the box.
 ///
