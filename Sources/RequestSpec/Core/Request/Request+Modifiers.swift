@@ -29,11 +29,7 @@ extension Request {
     }
 
     /// Add body using a result builder (converts to JSON)
-    public func body(
-        encoder: Encoder = JSONEncoder(), @BodyBuilder _ builder: () -> (any Encodable)?
-    )
-        -> Self
-    {
+    public func body(encoder: Encoder = JSONEncoder(), @BodyBuilder _ builder: () -> (any Encodable)?) -> Self {
         var copy = self
         let bodyDict = builder()
 
