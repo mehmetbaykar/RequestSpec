@@ -5,6 +5,8 @@
 //  Created by İbrahim Çetin on 8.10.2025.
 //
 
-public enum RequestSpecError: Error, Sendable {
+public enum RequestSpecError: Error {
     case invalidURL
+
+    case decodingFailed(response: HTTPResponse<Data>, underlyingError: any Error)
 }

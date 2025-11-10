@@ -274,3 +274,52 @@ struct NetworkServiceDirectRequestTests {
         #expect(response.body.data == "\"Test data\"")
     }
 }
+
+@Suite("Decoding Error Handling", .tags(.integration, .networkService))
+struct DecodingErrorHandlingTests {
+    @Test("Decoding error includes everything we need")
+    func testDecodingErrorIncludesEverythingWeNeed() async throws {
+        let service = EchoService()
+        let request = Get<TestUser>("json")
+
+        do {
+            _ = try await service.send(request)
+            Issue.record("Expected decoding error but succeeded")
+        } catch RequestSpecError.decodingFailed(let response, let underlyingError) {
+            #expect(response.statusCode == 200)
+
+            #expect(underlyingError is DecodingError)
+
+            #expect(response.body.count > 0)
+            #expect(String(decoding: response.body, as: UTF8.self).contains("title"))
+        } catch {
+            Issue.record("Expected decodingFailed error but got \(error)")
+        }
+    }
+    @Test("Successful decoding with custom type works normally")
+    func testSuccessfulDecodingWorks() async throws {
+        let service = EchoService()
+        let request = Get<Echo>("anything", "test")
+
+        // Should succeed without throwing
+        let response = try await service.send(request)
+
+        #expect(response.statusCode == 200)
+        #expect(response.body.method == "GET")
+    }
+
+    @Test("String and Data types never throw decoding errors")
+    func testStringAndDataTypesAlwaysSucceed() async throws {
+        let service = EchoService()
+
+        // String type with any status code
+        let stringRequest = Get<String>("status", "500")
+        let stringResponse = try await service.send(stringRequest)
+        #expect(stringResponse.statusCode == 500)
+
+        // Data type with any status code
+        let dataRequest = Get<Data>("status", "404")
+        let dataResponse = try await service.send(dataRequest)
+        #expect(dataResponse.statusCode == 404)
+    }
+}

@@ -53,8 +53,17 @@ extension NetworkService {
 
     public func send<R: Request>(_ request: R) async throws -> HTTPResponse<R.ResponseBody> {
         let (data, response) = try await data(for: request)
-        let body = try await decode(R.ResponseBody.self, from: data)
-        return HTTPResponse(body: body, originalResponse: response as! HTTPURLResponse)
+        let httpURLResponse = response as! HTTPURLResponse
+
+        do {
+            let body = try await decode(R.ResponseBody.self, from: data)
+            return HTTPResponse(body: body, originalResponse: httpURLResponse)
+        } catch {
+            throw RequestSpecError.decodingFailed(
+                response: HTTPResponse(body: data, originalResponse: httpURLResponse),
+                underlyingError: error
+            )
+        }
     }
 
     public func send<RS: RequestSpec>(_ requestSpec: RS) async throws -> HTTPResponse<RS.ResponseBody> {
