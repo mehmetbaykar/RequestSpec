@@ -1,6 +1,6 @@
 # RequestSpec
 
-RequestSpec is a lightweight Swift library that provides a fluent, declarative API for building HTTP requests, making your networking code more **maintainable**, **organized**, and **testable**. It is built on top of URLRequest and fully **interoperable** with existing libraries such as `[URLSession](https://developer.apple.com/documentation/foundation/urlsession)`, `[Alamofire](https://github.com/Alamofire/Alamofire)` and more. You can easily integrate it into your existing network layer.
+RequestSpec is a lightweight Swift library that provides a fluent, declarative API for building HTTP requests, making your networking code more **maintainable**, **organized**, and **testable**. It is built on top of `URLRequest` and fully **interoperable** with existing libraries such as [`URLSession`](https://developer.apple.com/documentation/foundation/urlsession), [`Alamofire`](https://github.com/Alamofire/Alamofire) and more. You can easily integrate it into your existing network layer.
 
 ```swift
 import RequestSpec
