@@ -40,7 +40,7 @@ extension NetworkService {
         return try await session.data(for: urlRequest)
     }
 
-    func decode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
+    nonisolated func decode<T: Decodable>(_ type: T.Type, from data: Data) async throws -> T {
         switch type {
         case is String.Type:
             return String(decoding: data, as: UTF8.self) as! T
@@ -53,7 +53,7 @@ extension NetworkService {
 
     public func send<R: Request>(_ request: R) async throws -> HTTPResponse<R.ResponseBody> {
         let (data, response) = try await data(for: request)
-        let body = try decode(R.ResponseBody.self, from: data)
+        let body = try await decode(R.ResponseBody.self, from: data)
         return HTTPResponse(body: body, originalResponse: response as! HTTPURLResponse)
     }
 
