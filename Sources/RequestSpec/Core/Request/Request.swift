@@ -35,7 +35,7 @@ extension Request {
     /// - Parameter baseURL: The base URL
     /// - Returns: A configured URLRequest
     /// - Throws:  Any error thrown while constructing the `URLRequest`.
-    public func urlRequest(baseURL: URL) throws -> URLRequest {
+    public func urlRequest(baseURL: URL) throws(RequestSpecError) -> URLRequest {
         // Build URL
         guard var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
             throw RequestSpecError.invalidURL
@@ -72,7 +72,7 @@ extension Request {
 }
 
 extension Request {
-    public func cURLDescription(baseURL: URL) throws -> String {
+    public func cURLDescription(baseURL: URL) throws(RequestSpecError) -> String {
         let request = try urlRequest(baseURL: baseURL)
 
         guard let url = request.url, let method = request.httpMethod

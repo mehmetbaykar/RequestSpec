@@ -106,7 +106,7 @@ extension RequestSpec {
     /// - Throws: ``RequestSpecError/invalidURL`` if the URL cannot be constructed
     ///
     /// - Note: This is a shortcut for ``Request/urlRequest(baseURL:)`` method.
-    public func urlRequest(baseURL: URL) throws -> URLRequest {
+    public func urlRequest(baseURL: URL) throws(RequestSpecError) -> URLRequest {
         try self.body.urlRequest(baseURL: baseURL)
     }
 }
