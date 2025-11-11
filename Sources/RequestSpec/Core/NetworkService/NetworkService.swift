@@ -7,6 +7,10 @@
 
 @_documentation(visibility: internal) @_exported import Foundation
 
+#if canImport(FoundationNetworking)
+    @_documentation(visibility: internal) @_exported import FoundationNetworking
+#endif
+
 /// The protocol for network service implementations that send HTTP requests.
 ///
 /// `NetworkService` is the main entry point for executing HTTP requests in your application.
