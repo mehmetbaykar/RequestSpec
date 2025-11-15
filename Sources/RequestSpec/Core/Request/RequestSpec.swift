@@ -71,7 +71,6 @@ import Foundation
 /// - SeeAlso:
 ///    ``Request``
 public protocol RequestSpec: Sendable {
-
     /// The underlying request type that defines the HTTP request structure.
     ///
     /// - SeeAlso:
@@ -83,20 +82,14 @@ public protocol RequestSpec: Sendable {
     ///     - ``Delete``
     associatedtype Body: Request
 
-    /// The response type this request spec expects.
-    ///
-    /// This associatedtype is inferred from the ``Body`` type and serves as a convenient
-    /// **shortcut** for `Body.ResponseBody`, making type signatures more concise.
-    ///
-    /// - Note: You don't need to declare this associatedtype, it is inferred from the ``Body`` type.
-    associatedtype ResponseBody where ResponseBody == Body.ResponseBody
-
     /// The underlying request that defines the actual HTTP request structure.
     ///
     /// This property is typically computed, allowing you to construct the ``Request`` using
     /// the spec's stored properties as parameters for paths, headers, query items, or body data.
     var body: Body { get }
 }
+
+// MARK: - Helpers
 
 extension RequestSpec {
     /// Build a URLRequest from this request spec and a base URL.
@@ -109,4 +102,10 @@ extension RequestSpec {
     public func urlRequest(baseURL: URL) throws(RequestSpecError) -> URLRequest {
         try self.body.urlRequest(baseURL: baseURL)
     }
+
+    /// The expected response type of the underlying request
+    ///
+    /// This typealias is a **shorthand** for `Body.ResponseBody`, letting you
+    /// refer directly to the return type of the underlying request.
+    public typealias ResponseBody = Body.ResponseBody
 }
