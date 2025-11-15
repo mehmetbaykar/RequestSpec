@@ -14,7 +14,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        // .package(url: "https://github.com/ibrahimcetin/RequestSpec.git", from: "0.1.0"),
+        // .package(url: "https://github.com/ibrahimcetin/RequestSpec.git", from: "0.2.0"),
         .package(path: "../../"),
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.10.0"),
     ],
