@@ -86,7 +86,7 @@ This library provides a few core tools that can be used to build networking laye
   <br> Define your requests and responses using Swift's type system. Generic request types ensure your responses are properly typed, eliminating casting and reducing runtime errors.
 
 * **Declarative syntax**
-  <br> Build requests using a fluent, SwiftUI-like syntax with result builders. Define paths, query parameters, headers, and body in a clear, readable way.
+  <br> Build requests using a fluent, declarative syntax. Define paths, query parameters, headers, and body in a clear, readable way.
 
 * **Composition**
   <br> Requests are composable values. Add headers, query items, and body data using chainable modifiers. Share common configurations across requests.
@@ -542,7 +542,7 @@ RequestSpec is built with clarity and discoverability in mind. The library uses:
 
 * **Protocol-oriented design** - Core functionality is defined through protocols, making the library extensible
 * **Generic types** - Type-safe responses eliminate casting and catch errors at compile time
-* **Result builders** - SwiftUI-like syntax for headers and query items
+* **Declarative syntax** - Declarative syntax for headers and query items
 * **Comprehensive examples** - Real-world examples in the Examples directory
 
 ### Interoperability with other libraries
